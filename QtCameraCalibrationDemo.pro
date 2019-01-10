@@ -1,6 +1,6 @@
 QT += core gui widgets
 
-TARGET = PatternTracking
+TARGET = CameraCalibration
 TEMPLATE = app
 CONFIG += c++11 console
 CONFIG -= app_bundle
@@ -26,9 +26,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     out_camera_data.yml \
-    in_VID5.xml \
-    VID5.xml \
-    out_camera_data.xml
+    out_camera_data.xml \
+    config.xml
 
 OPENCV_DIR = "D:\opt\opencv\build"
 

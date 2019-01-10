@@ -281,7 +281,7 @@ int main(int argc, char* argv[])
 
     //! [file_read]
     Settings s;
-    const string inputSettingsFile = argc > 1 ? argv[1] : "D:/opt/windows/Microsoft/VisualStudio/repos/CameraCalibration/QtCameraCalibrationOpenCV/in_VID5.xml";
+    const string inputSettingsFile = argc > 1 ? argv[1] : "D:/opt/windows/Microsoft/VisualStudio/repos/CameraCalibration/QtCameraCalibrationOpenCV/config.xml";
     FileStorage fs(inputSettingsFile, FileStorage::READ); // Read the settings
     if (!fs.isOpened())
     {
