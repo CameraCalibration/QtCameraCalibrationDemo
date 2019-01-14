@@ -388,8 +388,14 @@ int main(int argc, char* argv[])
                     blinkOutput = s.inputCapture.isOpened();
                 }
 
-                // Draw the corners.
-                drawChessboardCorners( view, s.boardSize, Mat(pointBuf), found );
+                if(s.calibrationPattern==Settings::RINGS_GRID){
+                    // Draw the corners.
+                    drawChessboardCorners( view, cv::Size(s.boardSize.height, s.boardSize.width), Mat(pointBuf), found );
+                }else{
+                    // Draw the corners.
+                    drawChessboardCorners( view, s.boardSize, Mat(pointBuf), found );
+                }
+
         }
         //! [pattern_found]
         //----------------------------- Output Text ------------------------------------------------
@@ -843,10 +849,13 @@ bool findRingsGrid(cv::InputArray image, cv::Size patternSize, vector<Point2f>& 
     imgThresh = adaptiveThresholdIntegralImage(imgBlur);
     centers = findGrid(imgThresh, patternSize);
 
-    std::vector<cv::Point2f> corners;
-    convexHullCorners(centers, corners);
+    bool trackCorrect = false;
+    if(centers.size()==patternSize.area()){
+        std::vector<cv::Point2f> corners;
+        convexHullCorners(centers, corners);
 
-    bool trackCorrect = trackingRingsPoints(centers, corners, patternSize);
+        trackCorrect = trackingRingsPoints(centers, corners, patternSize);
+    }
 
     return trackCorrect;
 }
