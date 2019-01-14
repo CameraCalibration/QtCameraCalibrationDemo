@@ -281,7 +281,7 @@ int main(int argc, char* argv[])
 
     //! [file_read]
     Settings s;
-    const string inputSettingsFile = argc > 1 ? argv[1] : "D:/opt/windows/Microsoft/VisualStudio/repos/CameraCalibration/QtCameraCalibrationOpenCV/config.xml";
+    const string inputSettingsFile = argc > 1 ? argv[1] : "D:/opt/windows/Microsoft/VisualStudio/repos/CameraCalibration/QtCameraCalibrationDemo/config_ring.xml";
     FileStorage fs(inputSettingsFile, FileStorage::READ); // Read the settings
     if (!fs.isOpened())
     {
@@ -763,9 +763,9 @@ bool trackingRingsPoints(std::vector<cv::Point2f> &keypoints, std::vector<cv::Po
         aux.push_back(std::make_pair(A.x,A.y));
         aux.push_back(std::make_pair(B.x,B.y));
 
-        if((int)aux.size()==patternSize.height){
+        if((int)aux.size()==patternSize.width){
             //Ordenando Ascendentemente x, descendentemente y
-            sort(aux.begin(),aux.end(),cmpByX);
+            sort(aux.begin(),aux.end(),cmp);
             ans.push_back(aux);
         }
     }
@@ -800,14 +800,14 @@ bool trackingRingsPoints(std::vector<cv::Point2f> &keypoints, std::vector<cv::Po
 
             // Ordenamos las distancias, para escoger los 3 mas cercanos
             std::sort(distanciaRecta.begin(),distanciaRecta.end(),cmpByDist);
-            for(int i=0;i<patternSize.width-2;i++){
+            for(int i=0;i<patternSize.height-2;i++){
                 SortPoints.push_back(std::make_pair(distanciaRecta[i].second.x,distanciaRecta[i].second.y));
                // circle(img, distanciaRecta[i].second, 5, colors[j%colors.size()], CV_FILLED,8,0);
             }
 
             //circle(img, Point(ans[1][j].first,ans[1][j].second), 10, CV_RGB(0,0,0), CV_FILLED,8,0);
             std::sort(SortPoints.rbegin(), SortPoints.rend(), [](const std::pair<float, float>& first, const std::pair<float, float>& second){
-                return (first.first < second.first);
+                return (first.second < second.second);
             });
             // Almacenando los puntos de una recta
             pila.push(SortPoints);
@@ -895,12 +895,15 @@ static void calcBoardCornerPositions(Size boardSize, float squareSize, vector<Po
     {
     case Settings::CHESSBOARD:
     case Settings::CIRCLES_GRID:
-    case Settings::RINGS_GRID:
-        for( int i = 0; i < boardSize.height; ++i )
-            for( int j = 0; j < boardSize.width; ++j )
+        for( int j = 0; j < boardSize.height; ++j )
+            for( int i = 0; i < boardSize.width; ++i )
                 corners.push_back(Point3f(j*squareSize, i*squareSize, 0));
         break;
-
+    case Settings::RINGS_GRID:
+        for( int j = 0; j < boardSize.width; ++j )
+            for( int i = 0; i < boardSize.height; ++i )
+                corners.push_back(Point3f(j*squareSize, i*squareSize, 0));
+        break;
     case Settings::ASYMMETRIC_CIRCLES_GRID:
         for( int i = 0; i < boardSize.height; i++ )
             for( int j = 0; j < boardSize.width; j++ )

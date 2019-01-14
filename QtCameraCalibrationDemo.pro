@@ -27,7 +27,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     out_camera_data.yml \
     out_camera_data.xml \
-    config.xml
+    config.xml \
+    config_chess.xml \
+    config_circle.xml \
+    config_ring.xml \
+    out_camera_data.xml
 
 OPENCV_DIR = "D:\opt\opencv\build"
 
